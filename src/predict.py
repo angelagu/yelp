@@ -16,7 +16,7 @@ model_direc = os.path.join(file_direc, '../models')
 if __name__ == "__main__":
     test_df = pd.read_json('%s/test.json' %data_direc, orient='index')
 
-    x_test = featurize.featurize_tfidf(test_df['reviews'])
+    x_test = featurize.featurize_tfidf(test_df['reviews'], save=False)
     y_test = test_df[['*', '**', '***']].astype(np.float64)
 
     model_name = 'logistic_regression'

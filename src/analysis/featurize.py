@@ -8,15 +8,17 @@ file_direc = os.path.dirname(__file__)
 data_direc = os.path.join(file_direc, '../../data')
 feature_direc = os.path.join(file_direc, '../../features')
 
-def featurize_tfidf(text, max_features=1500):
+def featurize_tfidf(text, max_features=1500, save=True):
     vec = TfidfVectorizer(stop_words='english', max_features=max_features)
     tfidf = vec.fit_transform(text).todense()
 
     df = pd.DataFrame(data=tfidf, columns=vec.get_feature_names())
-    df.to_json('%s/features.json' %feature_direc, orient='columns')
-    
-    w = open('%s/features_pretty.json' %feature_direc, 'w')
-    w.write(json.dumps(json.load(open('%s/features.json' %feature_direc)), indent=4))
+
+    if save:
+        df.to_json('%s/features.json' %feature_direc, orient='columns')
+        
+        w = open('%s/features_pretty.json' %feature_direc, 'w')
+        w.write(json.dumps(json.load(open('%s/features.json' %feature_direc)), indent=4))
 
     return df
 
