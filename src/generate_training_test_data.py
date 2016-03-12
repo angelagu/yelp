@@ -4,7 +4,8 @@ import os
 from sklearn.cross_validation import train_test_split
 import json
 
-data_direc = ''
+file_direc = os.path.dirname(__file__)
+data_direc = os.path.join(file_direc, '../data')
 test_size = 0.20
 
 def get_flattened_reviews(reviews_df, label_df):
@@ -47,7 +48,6 @@ def map_reviews_to_restaurant_ids(id_map, reviews):
     return reviews
 
 if __name__ == '__main__':
-    data_direc = '../data'
 
     id_map = pd.read_csv("%s/restaurant_ids_to_yelp_ids.csv" %data_direc)
 
@@ -60,6 +60,8 @@ if __name__ == '__main__':
              axis=1)
 
     reviews_df = map_reviews_to_restaurant_ids(id_map, reviews_df)
+
+    # TODO: Remove [:100] when actually training
 
     label_df = pd.read_csv("%s/AllViolations.csv" %data_direc, index_col=0)[:100]
     flattened_reviews = get_flattened_reviews(reviews_df, label_df)
