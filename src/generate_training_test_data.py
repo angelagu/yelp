@@ -61,9 +61,7 @@ if __name__ == '__main__':
 
     reviews_df = map_reviews_to_restaurant_ids(id_map, reviews_df)
 
-    # TODO: Remove [:100] when actually training
-
-    label_df = pd.read_csv("%s/AllViolations.csv" %data_direc, index_col=0)[:100]
+    label_df = pd.read_csv("%s/AllViolations.csv" %data_direc, index_col=0)
     flattened_reviews = get_flattened_reviews(reviews_df, label_df)
 
     labels = label_df[['*', '**', '***']].astype(np.float64)
