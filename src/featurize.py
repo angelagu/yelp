@@ -1,6 +1,8 @@
 import os
 import pandas as pd
+import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
+import json
 
 file_direc = os.path.dirname(__file__)
 data_direc = os.path.join(file_direc, '../data')
@@ -31,12 +33,15 @@ def featurize(train_text, max_features=1500):
     train_tfidf = vec.fit_transform(train_text)
 
     df = pd.DataFrame(data=train_tfidf.todense(), columns=vec.get_feature_names())
-    df.to_json('%s/features.json' %feature_direc, orient='index')
-
+    df.to_json('%s/features.json' %feature_direc, orient='columns')
+    
+    w = open('%s/features_pretty.json' %feature_direc, 'w')
+    w.write(json.dumps(json.load(open('%s/features.json' %feature_direc)), indent=4))
 
 if __name__ == '__main__':
 
     train_text = pd.read_json('%s/train.json' %data_direc, orient='index')['reviews']
 
     featurize(train_text)
+
 
