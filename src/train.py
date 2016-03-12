@@ -2,11 +2,14 @@ import os
 import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.externals import joblib
 import json
+from sklearn import linear_model
 
 file_direc = os.path.dirname(__file__)
 data_direc = os.path.join(file_direc, '../data')
 feature_direc = os.path.join(file_direc, '../features')
+model_direc = os.path.join(file_direc, '../models')
 
 def get_top_features(features, model, level, limit, bottom=False):
     """ Get the top (most likely to see violations) and bottom (least
@@ -27,21 +30,27 @@ def get_top_features(features, model, level, limit, bottom=False):
     else:
         # get the features at the beginning of the sorted list
         return features[sorted_coeffs[:limit]]
-    
-def featurize(train_text, max_features=1500):
-    vec = TfidfVectorizer(stop_words='english', max_features=max_features)
-    train_tfidf = vec.fit_transform(train_text)
 
-    df = pd.DataFrame(data=train_tfidf.todense(), columns=vec.get_feature_names())
-    df.to_json('%s/features.json' %feature_direc, orient='columns')
-    
-    w = open('%s/features_pretty.json' %feature_direc, 'w')
-    w.write(json.dumps(json.load(open('%s/features.json' %feature_direc)), indent=4))
+def linear_regression(x_train, y_train):
+    clf = linear_model.LinearRegression()
+    clf.fit(x_train, y_train)
+    joblib.dump(clf, '%s/logistic_regression.pkl' %model_direc)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    train_df = pd.read_json('%s/train.json' %data_direc, orient='index')
+    y_train = train_df[['*', '**', '***']].astype(np.float64)
 
-    train_text = pd.read_json('%s/train.json' %data_direc, orient='index')['reviews']
+    x_train = pd.read_json('%s/features.json' %feature_direc, orient='columns')
+    x_train = x_train.sort_index()
 
-    featurize(train_text)
+    linear_regression(x_train, y_train)
+
+
+
+
+
+
+
+
 
 
