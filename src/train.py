@@ -34,7 +34,7 @@ def get_top_features(features, model, level, limit, bottom=False):
 def linear_regression(x_train, y_train):
     clf = linear_model.LinearRegression()
     clf.fit(x_train, y_train)
-    joblib.dump(clf, '%s/logistic_regression.pkl' %model_direc)
+    joblib.dump(clf, '%s/linear_regression.pkl' %model_direc)
 
 if __name__ == "__main__":
     train_df = pd.read_json('%s/train.json' %data_direc, orient='index')
