@@ -68,6 +68,11 @@ if __name__ == '__main__':
 
     X_train, X_test, y_train, y_test = train_test_split(flattened_reviews, labels, test_size=test_size, random_state=42)
 
+    X_train.reset_index(drop=True)
+    X_test.reset_index(drop=True)
+    y_train.reset_index(drop=True)
+    y_test.reset_index(drop=True)
+
     X_train_df = X_train.to_frame(name='reviews')
     X_test_df = X_test.to_frame(name='reviews')
 
