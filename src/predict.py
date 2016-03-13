@@ -21,11 +21,14 @@ def predict(model_name, x_test, y_test):
     print mse
 
 if __name__ == "__main__":
+    print 'Reading test.json'
     test_df = pd.read_json('%s/test.json' %data_direc, orient='index')
 
-    x_test = featurize.featurize_tfidf(test_df['reviews'], save=False)
+    print 'Featurizing test.json'
+    x_test = featurize.transform_tfidf(test_df['reviews'])
     y_test = test_df[['*', '**', '***']].astype(np.float64)
 
+    print 'Predicting'
     predict('linear_regression', x_test, y_test)
 
 

@@ -37,12 +37,14 @@ def linear_regression(x_train, y_train):
     joblib.dump(clf, '%s/linear_regression.pkl' %model_direc)
 
 if __name__ == "__main__":
+    print 'Reading train.json'
     train_df = pd.read_json('%s/train.json' %data_direc, orient='index')
     y_train = train_df[['*', '**', '***']].astype(np.float64)
 
     x_train = pd.read_json('%s/features.json' %feature_direc, orient='columns')
     x_train = x_train.sort_index()
 
+    print 'Training...'
     linear_regression(x_train, y_train)
 
 
