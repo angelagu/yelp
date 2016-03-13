@@ -19,7 +19,7 @@ if __name__ == "__main__":
     x_test = featurize.featurize_tfidf(test_df['reviews'], save=False)
     y_test = test_df[['*', '**', '***']].astype(np.float64)
 
-    model_name = 'logistic_regression'
+    model_name = 'linear_regression'
     clf = joblib.load('%s/%s.pkl' %(model_direc, model_name))
 
     y_test_predicted = clf.predict(x_test)
