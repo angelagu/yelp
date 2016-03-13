@@ -68,19 +68,14 @@ if __name__ == '__main__':
 
     X_train, X_test, y_train, y_test = train_test_split(flattened_reviews, labels, test_size=test_size, random_state=42)
 
-    X_train.reset_index(drop=True)
-    X_test.reset_index(drop=True)
-    y_train.reset_index(drop=True)
-    y_test.reset_index(drop=True)
-
     X_train_df = X_train.to_frame(name='reviews')
     X_test_df = X_test.to_frame(name='reviews')
 
     train_df = pd.merge(X_train_df, y_train, how='inner', left_index=True, right_index=True)
     test_df = pd.merge(X_test_df, y_test, how='inner', left_index=True, right_index=True)
 
-    train_df.to_json('%s/train.json' %data_direc, orient='index')
-    test_df.to_json('%s/test.json' %data_direc, orient='index')
+    train_df.reset_index(drop=True).to_json('%s/train.json' %data_direc, orient='index')
+    test_df.reset_index(drop=True).to_json('%s/test.json' %data_direc, orient='index')
 
     w = open('%s/train_pretty.json'  %data_direc, 'w')
     w.write(json.dumps(json.load(open('%s/train.json' %data_direc)), indent=4))
